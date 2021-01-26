@@ -7,12 +7,17 @@ import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.quizapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -23,12 +28,12 @@ class MainActivity : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
 
-        btn_start.setOnClickListener {
-            if(et_name.text.toString().isEmpty()) {
+        binding.btnStart.setOnClickListener {
+            if(binding.etName.text.toString().isEmpty()) {
                 Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = Intent(this, QuizQuestionsActivity::class.java)
-                intent.putExtra(Constants.USER_NAME, et_name.text.toString())
+                intent.putExtra(Constants.USER_NAME, binding.etName.text.toString())
                 startActivity(intent)
                 finish()
             }

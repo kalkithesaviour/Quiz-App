@@ -11,7 +11,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_quiz_questions.*
+import com.example.quizapp.databinding.ActivityQuizQuestionsBinding
 
 class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -20,10 +20,13 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private var mSelectedOptionPosition: Int = 0
     private var mCorrectAnswers: Int = 0
     private var mUserName: String? = null
+    private lateinit var binding: ActivityQuizQuestionsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_quiz_questions)
+        binding = ActivityQuizQuestionsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -40,11 +43,11 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
         setQuestion()
 
-        tv_option_one.setOnClickListener(this)
-        tv_option_two.setOnClickListener(this)
-        tv_option_three.setOnClickListener(this)
-        tv_option_four.setOnClickListener(this)
-        btn_submit.setOnClickListener(this)
+        binding.tvOptionOne.setOnClickListener(this)
+        binding.tvOptionTwo.setOnClickListener(this)
+        binding.tvOptionThree.setOnClickListener(this)
+        binding.tvOptionFour.setOnClickListener(this)
+        binding.btnSubmit.setOnClickListener(this)
     }
 
     private fun setQuestion() {
@@ -54,27 +57,27 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
         defaultOptionsView()
 
         if(mCurrentPosition == mQuestionsList!!.size) {
-            btn_submit.text = "FINISH"
+            binding.btnSubmit.text = "FINISH"
         } else {
-            btn_submit.text = "SUBMIT"
+            binding.btnSubmit.text = "SUBMIT"
         }
 
-        tv_progress.text = "$mCurrentPosition/10"
+        binding.tvProgress.text = "$mCurrentPosition" + "/" + "${binding.progressBar.max}"
 
-        tv_question.text = question!!.question
-        iv_image.setImageResource(question.image)
-        tv_option_one.text = question.optionOne
-        tv_option_two.text = question.optionTwo
-        tv_option_three.text = question.optionThree
-        tv_option_four.text = question.optionFour
+        binding.tvQuestion.text = question!!.question
+        binding.ivImage.setImageResource(question.image)
+        binding.tvOptionOne.text = question.optionOne
+        binding.tvOptionTwo.text = question.optionTwo
+        binding.tvOptionThree.text = question.optionThree
+        binding.tvOptionFour.text = question.optionFour
     }
 
     private fun defaultOptionsView() {
         val options = ArrayList<TextView>()
-        options.add(tv_option_one)
-        options.add(tv_option_two)
-        options.add(tv_option_three)
-        options.add(tv_option_four)
+        options.add(binding.tvOptionOne)
+        options.add(binding.tvOptionTwo)
+        options.add(binding.tvOptionThree)
+        options.add(binding.tvOptionFour)
 
         for(option in options) {
             option.setTextColor(Color.parseColor("#7A8089"))
@@ -89,16 +92,16 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.tv_option_one -> {
-                selectedOptionView(tv_option_one, 1)
+                selectedOptionView(binding.tvOptionOne, 1)
             }
             R.id.tv_option_two -> {
-                selectedOptionView(tv_option_two, 2)
+                selectedOptionView(binding.tvOptionTwo, 2)
             }
             R.id.tv_option_three -> {
-                selectedOptionView(tv_option_three, 3)
+                selectedOptionView(binding.tvOptionThree, 3)
             }
             R.id.tv_option_four -> {
-                selectedOptionView(tv_option_four, 4)
+                selectedOptionView(binding.tvOptionFour, 4)
             }
             R.id.btn_submit -> {
                 if(mSelectedOptionPosition == 0) {
@@ -127,9 +130,9 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
                     answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
 
                     if(mCurrentPosition == mQuestionsList!!.size) {
-                        btn_submit.text = "FINISH"
+                        binding.btnSubmit.text = "FINISH"
                     } else {
-                        btn_submit.text = "GO TO NEXT QUESTION"
+                        binding.btnSubmit.text = "GO TO NEXT QUESTION"
                     }
                     mSelectedOptionPosition = 0
                 }
@@ -140,16 +143,16 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private fun answerView(answer: Int, drawableView: Int) {
         when(answer) {
             1 -> {
-                tv_option_one.background = ContextCompat.getDrawable(this, drawableView)
+                binding.tvOptionOne.background = ContextCompat.getDrawable(this, drawableView)
             }
             2 -> {
-                tv_option_two.background = ContextCompat.getDrawable(this, drawableView)
+                binding.tvOptionTwo.background = ContextCompat.getDrawable(this, drawableView)
             }
             3 -> {
-                tv_option_three.background = ContextCompat.getDrawable(this, drawableView)
+                binding.tvOptionThree.background = ContextCompat.getDrawable(this, drawableView)
             }
             4 -> {
-                tv_option_four.background = ContextCompat.getDrawable(this, drawableView)
+                binding.tvOptionFour.background = ContextCompat.getDrawable(this, drawableView)
             }
         }
     }
